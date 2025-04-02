@@ -1,8 +1,8 @@
 # MAGNET
-# Group 6 - Deep Dive: CUDA programming project
-## YOUTUBE LINK: https://www.youtube.com/watch?v=G4j9476OIJ8
+# Group 6 - Integrating Project
+## YOUTUBE LINK: 
 
-- This project aims to implement Histogram counting in C and use CUDA prorgamming to accelerate the computation. The CUDA implementation uses Unified memory, pre-fetching, memadvise, and shared memory concept. The C and CUDA implementation has a vector size of 2^28 and the CUDA implementation is tested with thread counts of 256 and 1024. The function or kernel is executed 30 times.
+- This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. 
   
 ## Members
 
