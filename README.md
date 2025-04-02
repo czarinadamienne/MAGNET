@@ -25,8 +25,8 @@
    
 <br/>
 ### II. Screenshot of the program output with execution time and correctness check (CUDA)
-  **E = 0**
-    **256 Blocks**
+**E = 0**
+  **256 Blocks**
     
   ![image](https://github.com/user-attachments/assets/3c21103a-259d-443a-94a3-8307fe1a75da)
 
@@ -40,7 +40,7 @@
 
 <br/>
 **E = 0**<br/>
-    **1024 Blocks**<br/>
+  **1024 Blocks**<br/>
     
   ![image](https://github.com/user-attachments/assets/97860dca-c34e-4b92-a0ab-31bb5ebd662a)
     
