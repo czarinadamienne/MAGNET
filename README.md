@@ -82,7 +82,8 @@ The ConsecutiveZeros() function scans and finds groups of consecutive zeros with
   ![image](https://github.com/user-attachments/assets/954d3b87-2b06-4825-81f8-f0c1fb61939f)
    
 
-  text
+The MAGNET pre-alignment filter would first create a hamming mask of the query and reference sequence through checking the nucleobase of the query and reference sequence in the same location. It would mark as 0 if the sequences matches, and 1 if it does not match. It would also create a deletion and insertion mask, having a total of 2E+1 hamming masks, where E is the edit distance threshold. This parameter could be set by the user. To create a deletion mask, it would shift the query sequence to the right, and to create an insertion mask, it would shift the query to the left. The number of shifts are dependent on the edit distance threshold. This is done in the MAGNET function. Next, it would find the longest consecutive zeroes in each masks and its information such as number of zeroes, and start and end index of the zeroes would be stored. The longest zeroes for each mask would be padded with 1s. This is done in Consecutive Zeroes function. It would iteratively use divide and conquer to find the longest zeroes among all the hamming masks and copy these zeroes to the final bit-vector. This is done in Extraction Encapsulation function. Lastly, it will count the number of 1s in the final bit-vector, if the number of 1s are greater than the edit distance threshold, the sequence will be rejected, but if the number of 1s are less than or equal to the edit distance threshold, the sequence will be accepted. This is done in the MAGNET function. 
+
   
 **2. CUDA Implementation**
    - Compute Hamming and Errors Kernel<br/>
@@ -107,6 +108,7 @@ The ConsecutiveZeros() function scans and finds groups of consecutive zeros with
  - Correctness checker<br/>
   ![image](https://github.com/user-attachments/assets/5c22772d-6d6e-43c1-bba1-249d0c35f0f1)
 
+text
 
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
@@ -133,9 +135,17 @@ The shared memory concept was also applied in the creation of the CUDA program. 
 
 ### V. Discussion
 
+- **Parallel Algorithms** <br/>
+The functionalities that were converted from sequential to parallel processing were the hamming distance computation, extraction and encapsulation function, and the locating of the longest set of consecutive zeros in a mask.
+
+The hamming mask calculation is used to track the number of errors between the reference and query genome. The hamming mask calculation for the sequential processing implementation was originally placed into the MAGNET function. One corresponding character from the reference and query genome were compared one at a time during execution. This process was converted into a parallel algorithm through the creation of the computeHammingAndErrorsKernel function. Instead of comparing sequentially, multiple threads are deployed and each one is assigned to compare one corresponding character from the reference and query genome which allows multiple comparisons to be made in one cycle. Global memory is then used to store the results from these comparisons with the additional use of atomic operations to prevent race conditions from occurring. 
+
+The extraction and encapsulation function in the original sequential implementation uses a stack-based approach to modify the segment runs of zeros in the hamming masks. This process is done by processing one sequence region at a time. In the parallelized version, multiple threads are assigned to process more sequence regions at a time and update these hamming masks in parallel. 
+
+The searching for consecutive zeros is done sequentially by iteratively looking over each character in the hamming mask. It marks the starting index of the zero sequence and marks the end index when looking at a non-zero number. This does it one sequence at a time and loops until all sequences have been checked. For the parallel implementation, multiple threads process different portions of the arrays with the additional use of global memory for storage of results while using atomic operations to avoid race conditions.
 
 - **Problems encountered** <br/>
-Race conditions occurred with the threads in a block when writing in the shared memory. This caused incorrect values to be added to each histogram bin which produced the incorrect results. Multiple threads writing to the same memory location causing incorrect incrementation of some bins resulting in incorrect results.
+One problem encountered during the creation of the project was the conversion of the MATLAB source code into the C code. The original implementation had the functions separated so unifying them into one source code proved difficult. Another problem encountered was the encountering of segmentation faults at higher dataset sizes for the CUDA implementation. It is also observed as the Edit distance threshold increases, there would be a difference of 2 in between the number of accepted sequences in CUDA and C. 
 
 - **AHA moments** <br/>
-The use of the __syncthreads() function was implemented to allow for all threads in a block to finish updating the shared memory before merging with the global memory. The additional use of atomicAdd() to prevent two or more threads from updating the same memory location, preventing incorrect results.
+The processes that were best suited for parallelization in the original sequential implementation were the processes that utilized iterative statements to process their data. Since sequential processing processes one piece of data per cycle, these areas proved the best suited for parallelization. 
