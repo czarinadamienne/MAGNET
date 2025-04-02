@@ -71,6 +71,8 @@ The ConsecutiveZeros() function scans and finds groups of consecutive zeros with
     ![image](https://github.com/user-attachments/assets/6db3d59f-20a3-4b74-9ffb-f103b71ffe96)
 
   ![image](https://github.com/user-attachments/assets/7bc4072a-a5e6-47ed-a251-718ba0394ec4)
+
+The Extraction_Encapsulation() function finds long sequences of zeros in a given range and marks in the MagnetMask. It starts by storing the range in a stack and processes it until all sections are checked. For each range, it looks at different versions of the sequence and finds the longest group of consecutive zeros. If a second-longest group exists, it keeps track of that too. Once the longest zero sequence is found, it marks those positions as zero in MagnetMask. The function will then split the remaining unprocessed parts and add them back to the stack to continue searching.
  
    - MAGNET function<br/>
     ![image](https://github.com/user-attachments/assets/326bf040-8377-4b99-888f-31c1da944611)
