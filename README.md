@@ -2,7 +2,7 @@
 # Group 6 - Integrating Project
 ## YOUTUBE LINK: 
 
-- This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. 
+- This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. This is tested through using 1000 genomic sequences with a length of 100 characters. The filter was tested with edit distance threshold of 0, 3, and 10.
   
 ## Members
 
@@ -12,45 +12,82 @@
 * Herrera, Diego Martin
 
 ## Report
-
 ### I. Screenshot of the program output with execution time and correctness check (C)
-   ![image](https://github.com/user-attachments/assets/27c8ffd3-09e1-400d-9d5d-3e0b77011ff0)
+   **E = 0**
+   ![image](https://github.com/user-attachments/assets/d0c287cf-4a82-4dd2-b055-f04cf57b7dfe)
+
+   **E = 3**
+   ![image](https://github.com/user-attachments/assets/7521241d-e034-4f61-9406-3381d97bd2eb)
+
+   **E = 8**
+   ![image](https://github.com/user-attachments/assets/7720c52c-fe0e-4927-bed4-d5e7188a015c)
+
+   
 <br/>
 ### II. Screenshot of the program output with execution time and correctness check (CUDA)
-**256 Threads**
-  ![image](https://github.com/user-attachments/assets/06dd69b1-420a-4316-a5d2-02386bac75e8)
+  **E = 0**
+    **256 Blocks**
+    ![image](https://github.com/user-attachments/assets/3c21103a-259d-443a-94a3-8307fe1a75da)
+
+  **E = 3**
+    **256 Blocks**
+    ![image](https://github.com/user-attachments/assets/dd030d92-e0e4-4f6b-b7a6-c75fbfc68249)
+
+  **E = 8**
+    **256 Blocks**
+    ![image](https://github.com/user-attachments/assets/3b47e7e3-9847-4c19-b5d8-d3feac83b1bc)
+
 <br/>
-**1024 Threads**
-  ![image](https://github.com/user-attachments/assets/4f736d28-b66d-4a27-b68c-3172b735b43d)
+**E = 0**
+    **1024 Blocks**
+    ![image](https://github.com/user-attachments/assets/ed2b1e79-c18b-4b9a-9bb1-8a1f51d698ce)
+
+**E = 3**
+    **1024 Blocks**
+    ![image](https://github.com/user-attachments/assets/2aeb2a45-f111-4c25-acca-d11738f84998)
+
+**E = 8**
+    **1024 Blocks**
+    ![image](https://github.com/user-attachments/assets/27980cfb-5389-4e40-94f8-ae6dab330132)
+
+  
 <br/>
 ### III. Screenshot of the program implementation
 **1. C Implementation**
-   - Histogram Count function<br/>
-     ![image](https://github.com/user-attachments/assets/c87c1404-1a1d-4206-9a4b-7f360cb195b3)
-   - Correctness checker<br/>
-     ![image](https://github.com/user-attachments/assets/e09484fe-b7d0-4469-8028-263fb27231c6)
+   - Consecutive Zeros Info function<br/>
 
-  As shown above, the function computes for the index by looping through the vector and getting its remainder when divided by 10. The computed index is used to locate the specific histogram to increment.
+   - Extraction Encapsulation function<br/>
+   
+   - MAGNET function<br/>
+     
+   - Correctness checker<br/>
+     
+
+  text
 **2. CUDA Implementation**
-   - Histogram Count kernel<br/>
-     ![image](https://github.com/user-attachments/assets/ee82de7f-76ff-42c1-a329-34b1cd1511ad)
-   - Correctness checker<br/>
-     ![image](https://github.com/user-attachments/assets/57496315-5671-4d53-8f43-695ee7ecfb96)
+   - Consecutive Zeros Info function<br/>
 
-     Similar to the C implementation, but this applied shared memory. A static shared memory called sharedHist with 10 elements is initialized. The sharedHist is first initialized to 0 to properly increment the values inside it, later on. __syncthreads() is called after to synchronize the threads since each threads are executing in parallel in a block. This is to avoid race condition. The next block computes for the index of the histogram to be incremented. atomicAdd() is used to read the address in shared memory, adds one, and writes the result back to the same address read. When this is called, no threads can access the same address until writing of the results is finished. To write back to global memory, atomicAdd is also used. The kernel only modifies the values first in the shared memory and then the result will be written back to the global memory, histbins[].
+   - Extraction Encapsulation function<br/>
+   
+   - MAGNET function<br/>
+     
+   - Correctness checker<br/>
+     
+
+     text
      
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
-| Vector size | C Program      | 
-| ----------- | -------------- | 
-| 1 << 28     | 1667.850767 ms |
+| Dataset size | E = 0      | E = 3 | E = 10 |
+| ------------ | ---------- | ----- | ------ |
+| 1000         |  ms | ms | ms |
 
 
 Average execution times of CUDA
-| Vector size = 1 << 28 | CUDA Program      | Speedup compared to C |
-| --------------------- | ----------------- | --------------------- |
-| Threads = 256         | 96.590928 ms      | 17.3x                 |
-| Threads = 1024        | 98.698222 ms      | 16.9x                 |
+| Dataset size = 1000 | E = 0 | E = 3| E = 10 | Speedup compared to C |
+| ------------------- | ----- |------|--------| --------------------- |
+| Threads = 256         |  ms |    ms |       ms  |      x  |
+| Threads = 1024        |  ms |    ms |        ms |       x  |
 
 
 Both kernels were timed with a vector size of 2^28 and their average execution times after 30 loops of the function were compared. The C kernel had an average execution time of 1667.850767 ms while the CUDA kernel with 1024 threads had an average execution time of 98.698222 ms. The CUDA kernel with 1024 threads was around 16.9 times faster than the C kernel. Additionally, the CUDA kernel with 256 threads had an execution time of 96.590928 ms, which is a 17.3 times faster than the C kernel. It is also observed that 256 threads is faster, for this case, than 1024 threads. This could be because 256 threads is the enough amount of threads needed as there is less memory access and fewer conflicts, since shared memory is applied in the code. There could be bank conflicts if there are too many threads per block.
@@ -75,6 +112,3 @@ Race conditions occurred with the threads in a block when writing in the shared 
 
 - **AHA moments** <br/>
 The use of the __syncthreads() function was implemented to allow for all threads in a block to finish updating the shared memory before merging with the global memory. The additional use of atomicAdd() to prevent two or more threads from updating the same memory location, preventing incorrect results.
-
-- **When is it faster/better to use shared memory?** <br/>
-It is better to use shared memory when we have to repeatedly access and modify the same data. It is also better to use this when manupulating large datasets. Moreover, it is also faster because it accesses and modifies local data or the data that is already inside the GPU chip, compared to C, wherein it has to call or pass the histogram bins outside of the function. 
