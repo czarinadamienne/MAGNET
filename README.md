@@ -57,7 +57,9 @@
   
 <br/>
 ### III. Screenshot of the program implementation
+
 **1. C Implementation**
+
    - Consecutive Zeros Info function<br/>
     ![image](https://github.com/user-attachments/assets/8f735bb9-5c3d-49e0-9508-0b503eadbd89)
 
@@ -78,6 +80,7 @@
    
 
   text
+  
 **2. CUDA Implementation**
    - Compute Hamming and Errors Kernel<br/>
   ![image](https://github.com/user-attachments/assets/bf950964-8479-45cb-8c84-6af45d1ac1be)
