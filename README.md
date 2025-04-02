@@ -24,6 +24,7 @@
 
    
 <br/>
+
 ### II. Screenshot of the program output with execution time and correctness check (CUDA) <br/>
 
 **E = 0** <br/>
