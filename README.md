@@ -59,27 +59,49 @@
 ### III. Screenshot of the program implementation
 **1. C Implementation**
    - Consecutive Zeros Info function<br/>
+    ![image](https://github.com/user-attachments/assets/8f735bb9-5c3d-49e0-9508-0b503eadbd89)
 
    - Extraction Encapsulation function<br/>
-   
+    ![image](https://github.com/user-attachments/assets/6db3d59f-20a3-4b74-9ffb-f103b71ffe96)
+
+  ![image](https://github.com/user-attachments/assets/7bc4072a-a5e6-47ed-a251-718ba0394ec4)
+ 
    - MAGNET function<br/>
-     
+    ![image](https://github.com/user-attachments/assets/326bf040-8377-4b99-888f-31c1da944611)
+
+  ![image](https://github.com/user-attachments/assets/1e60b933-3afb-4a2c-99dc-09a8ea446b9d)
+
+  ![image](https://github.com/user-attachments/assets/43fac034-12d8-47de-845f-fee05d5bbff8)
+    
    - Correctness checker<br/>
-     
+  ![image](https://github.com/user-attachments/assets/954d3b87-2b06-4825-81f8-f0c1fb61939f)
+   
 
   text
 **2. CUDA Implementation**
-   - Consecutive Zeros Info function<br/>
+   - Compute Hamming and Errors Kernel<br/>
+  ![image](https://github.com/user-attachments/assets/bf950964-8479-45cb-8c84-6af45d1ac1be)
+  ![image](https://github.com/user-attachments/assets/9369f273-1d30-437c-80d0-d3851fb5ddde)
 
-   - Extraction Encapsulation function<br/>
-   
-   - MAGNET function<br/>
-     
-   - Correctness checker<br/>
-     
+   - Find Consecutive Zeroes Kernel<br/>
+   ![image](https://github.com/user-attachments/assets/aeefe70a-bbfc-4467-a0e5-27628f94bfac)
+   ![image](https://github.com/user-attachments/assets/bd3271c5-b0b5-46f4-9d48-90e66185054b)
 
-     text
-     
+   - Find Consecutive Zeroes Function<br/>
+    ![image](https://github.com/user-attachments/assets/c15b952c-08e8-43c5-9b7a-1a68b557b666)
+
+   - Extract Magnet Mask Function<br/>
+   ![image](https://github.com/user-attachments/assets/b929b9eb-1666-4814-b702-70652c088179)
+    ![image](https://github.com/user-attachments/assets/77e27dbd-18af-473d-a05b-8eff3225a804)
+
+   - Magnet CUDA Function<br/>
+   ![image](https://github.com/user-attachments/assets/70bf328a-cd0a-47d3-802f-e7de76847935)
+    ![image](https://github.com/user-attachments/assets/8cde2d75-a218-4d6a-9a56-5c5217533b31)
+
+ - Correctness checker<br/>
+  ![image](https://github.com/user-attachments/assets/5c22772d-6d6e-43c1-bba1-249d0c35f0f1)
+
+
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
 | Dataset size | E = 0      | E = 3 | E = 10 |
@@ -104,12 +126,7 @@ The shared memory concept was also applied in the creation of the CUDA program. 
 <br/>
 
 ### V. Discussion
-- **Why is CUDA faster?** <br/>
-The C Kernel runs on the CPU, which processes each data point one-by-one. If you have around 268 million items, it will definitely take a long time.
-CUDA Kernel runs on GPU which splits the work into many smaller tasks and does them all at the same time as explained earlier, hence why the GPU finishes task much faster. CUDA has smart tricks such as unified memory, page creation, and mem advise. 
-  - Unified Memory: Instead of manually moving data between CPU and GPU, the system does it automatically.
-  - Page Creation: This reduces the number of interruptions (page faults) when the GPU needs new data
-  - Mem Advise: Only sends back the final result from GPU to CPU, instead of sending everything which causes unnecessary data transfers.
+
 
 - **Problems encountered** <br/>
 Race conditions occurred with the threads in a block when writing in the shared memory. This caused incorrect values to be added to each histogram bin which produced the incorrect results. Multiple threads writing to the same memory location causing incorrect incrementation of some bins resulting in incorrect results.
