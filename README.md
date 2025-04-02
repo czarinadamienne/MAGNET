@@ -1,9 +1,8 @@
-# MAGNET
 # Group 6 - Integrating Project
 ## YOUTUBE LINK: 
 
-- This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. This is tested through using 1000 genomic sequences with a length of 100 characters. The filter was tested with edit distance threshold of 0, 3, and 10.
-  
+- This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. This is tested through using 1000 genomic sequences with a length of 100 characters. The filter was tested with edit distance threshold of 0, 3, and 8.
+
 ## Members
 
 * Alamay, Carl Justine
@@ -11,6 +10,9 @@
 * Esteban, Janina Angela
 * Herrera, Diego Martin
 
+## MAGNET pre-alignment filter algorithm
+- The MAGNET pre-alignment filter would first create a hamming mask of the query and reference sequence through checking the nucleobase of the query and reference sequence in the same location. It would mark as 0 if the sequences matches, and 1 if it does not match. It would also create a deletion and insertion mask, having a total of 2E+1 hamming masks, where E is the edit distance threshold. This parameter could be set by the user. To create a deletion mask, it would shift the query sequence to the right, and to create an insertion mask, it would shift the query to the left. The number of shifts are dependent on the edit distance threshold. This is done in the MAGNET function. Next, it would find the longest consecutive zeroes in each masks and its information such as number of zeroes, and start and end index of the zeroes would be stored. The longest zeroes for each mask would be padded with 1s. This is done in Consecutive Zeroes function. It would iteratively use divide and conquer to find the longest zeroes among all the hamming masks and copy these zeroes to the final bit-vector. This is done in Extraction Encapsulation function. Lastly, it will count the number of 1s in the final bit-vector, if the number of 1s are greater than the edit distance threshold, the sequence will be rejected, but if the number of 1s are less than or equal to the edit distance threshold, the sequence will be accepted. This is done in the MAGNET function. 
+  
 ## Report
 ### I. Screenshot of the program output with execution time and correctness check (C)
    **E = 0**
@@ -89,8 +91,6 @@ The function will then call Extraction_Encapsulation() to identify the longest c
   ![image](https://github.com/user-attachments/assets/954d3b87-2b06-4825-81f8-f0c1fb61939f)
 
 The snippet of the code showing the correctness checker compares two bit vectors, those being the finalBitVector from the intended output and another from a comparison variant. It iterates over the entire sequence being compared, and for every index, it checks if the corresponding bit in both the bit vectors match or not. If they are a mismatch at that specific index, then the error counter will be incremented by 1. This is to keep track of the number of matches between the two bit vectors.   
-
-The MAGNET pre-alignment filter would first create a hamming mask of the query and reference sequence through checking the nucleobase of the query and reference sequence in the same location. It would mark as 0 if the sequences matches, and 1 if it does not match. It would also create a deletion and insertion mask, having a total of 2E+1 hamming masks, where E is the edit distance threshold. This parameter could be set by the user. To create a deletion mask, it would shift the query sequence to the right, and to create an insertion mask, it would shift the query to the left. The number of shifts are dependent on the edit distance threshold. This is done in the MAGNET function. Next, it would find the longest consecutive zeroes in each masks and its information such as number of zeroes, and start and end index of the zeroes would be stored. The longest zeroes for each mask would be padded with 1s. This is done in Consecutive Zeroes function. It would iteratively use divide and conquer to find the longest zeroes among all the hamming masks and copy these zeroes to the final bit-vector. This is done in Extraction Encapsulation function. Lastly, it will count the number of 1s in the final bit-vector, if the number of 1s are greater than the edit distance threshold, the sequence will be rejected, but if the number of 1s are less than or equal to the edit distance threshold, the sequence will be accepted. This is done in the MAGNET function. 
 
   
 **2. CUDA Implementation**
