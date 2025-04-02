@@ -64,6 +64,8 @@
    - Consecutive Zeros Info function<br/>
     ![image](https://github.com/user-attachments/assets/8f735bb9-5c3d-49e0-9508-0b503eadbd89)
 
+The ConsecutiveZeros() function scans and finds groups of consecutive zeros within in array, more specifically in the specified sequence. It creates three variables to store the starting and ending positions, and the lengths of the zero groups. When a "1" appears as it's going through the array, it marks the end of the zero sequence and saves the details before looking for the next zeros group. It will then return all the collected information from these zero groups.
+
    - Extraction Encapsulation function<br/>
     ![image](https://github.com/user-attachments/assets/6db3d59f-20a3-4b74-9ffb-f103b71ffe96)
 
