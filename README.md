@@ -128,24 +128,23 @@ Average execution time of C Program
 Average execution times of CUDA
 | Dataset size = 1000 | E = 0 | E = 3| E = 8 |
 | ------------------- | ----- |------|--------|
-| Blocks = 256        | 105.38 ms | 100.89 ms | 106.09 ms |
-| Blocks = 1024       | 110.56 ms | 172.39 ms | 176.40 ms |
+| Blocks = 256        | 73.602 ms | 100.89 ms | 106.09 ms |
+| Blocks = 1024       | 110.56 ms | 172.39 ms | 173.15 ms |
 
 Speedup of CUDA compared to C
 | Edit distance threshold | Speedup compared to C |
 | ----------------------- | --------------------- |
-| E = 0 | 8.94x |
-| E = 3 | 2.16x |
-| E = 8 | 1.30x |
+| E = 0 | 0.16x |
+| E = 3 | 0.79x |
+| E = 8 | 1.27x |
 
 
-Both kernels were timed with a vector size of 2^28 and their average execution times after 30 loops of the function were compared. The C kernel had an average execution time of 1667.850767 ms while the CUDA kernel with 1024 threads had an average execution time of 98.698222 ms. The CUDA kernel with 1024 threads was around 16.9 times faster than the C kernel. Additionally, the CUDA kernel with 256 threads had an execution time of 96.590928 ms, which is a 17.3 times faster than the C kernel. It is also observed that 256 threads is faster, for this case, than 1024 threads. This could be because 256 threads is the enough amount of threads needed as there is less memory access and fewer conflicts, since shared memory is applied in the code. There could be bank conflicts if there are too many threads per block.
-<br/>
+Both implementations were timed with a dataset size of 1000 sequences and their average execution times after 10 repeats were compared. The C implementation had an average execution time of 12.36ms if E = 0, 79.94ms if E = 3, and 135.00ms if E = 8. It is observed that as the edit distance threshold increases, the execution time also increases. This is because as the edit distance threshold increase, there would be more hamming masks that would be generated and has to sequentially find the longest zeroes in each hamming mask. 
 
-The C kernel is generally slower in execution due to the sequential execution of the function during the loop. The CPU will have to iterate 2^28 elements one at a time. The CUDA kernel deploys multiple threads for the computation of the histogram bins to allow for parallel execution of the function. The use of unified memory, page creation, and mem advise also aided in the reduction of execution time for the CUDA kernel. The unified memory removes the manual copying of data between host and device, page creation to reduce the number of page faults that occur, and mem advise to only send the output of the GPU back to the CPU rather than both the input and the output. These three techniques lowers the overall overhead of the kernel and allows for faster execution time.
-<br/>
+Meanwhile, for CUDA implementation with 256 blocks, it has an average execution time of 73.602ms, if E = 0, 100.89ms if E = 3, and 106.89ms if E = 8. With 1024 blocks, it has an average execution time of 110.56ms if E = 0, 172.39ms if E = 3, and 173.15ms if E = 8. This resulted to a speedup of 0.16x for E = 0, 0.79x for E = 3, and 1.27x for E = 8. Similar to the sequential implementation, the higher the edit distance threshold, the execution time also increases. Moreover, it is observed that at 1024 blocks, the execution time is higher compared to its original implementation and 256 blocks. This could be due too many threads executing for a small dataset size. With this, it is suggested to use 256 blocks for this dataset size.
 
-The shared memory concept was also applied in the creation of the CUDA program. Instead of each thread block having to access the global memory, it instead accesses its own shared memory which stores frequently accessed data. Each thread will update its own copy in their own shared memory block which is later merged with the global memory later on. This removes the latency that comes with repeatedly accessing global memory which is not present when accessing shared memory. This further reduced the memory overhead that the CUDA kernel experiences.
+One of the main observation is that the CUDA implementation is slower than the C, which could be due to a small dataset size and CUDA works more efficiently with larger datasets. However, current CUDA implementation causes a segmentation fault at larger dataset sizes. Additionally, at 256 blocks and E = 8, the CUDA implementation did speed up the filter by 1.27x. 
+
 <br/>
 
 ### V. Discussion
@@ -160,7 +159,7 @@ The extraction and encapsulation function in the original sequential implementat
 The searching for consecutive zeros is done sequentially by iteratively looking over each character in the hamming mask. It marks the starting index of the zero sequence and marks the end index when looking at a non-zero number. This does it one sequence at a time and loops until all sequences have been checked. For the parallel implementation, multiple threads process different portions of the arrays with the additional use of global memory for storage of results while using atomic operations to avoid race conditions.
 
 - **Problems encountered** <br/>
-One problem encountered during the creation of the project was the conversion of the MATLAB source code into the C code. The original implementation had the functions separated so unifying them into one source code proved difficult. Another problem encountered was the encountering of segmentation faults at higher dataset sizes for the CUDA implementation. It is also observed as the Edit distance threshold increases, there would be a difference of 2 in between the number of accepted sequences in CUDA and C. 
+One problem encountered during the creation of the project was the conversion of the MATLAB source code into the C code. The original implementation had the functions separated so unifying them into one source code proved difficult. Another problem encountered was the encountering of segmentation faults at higher dataset sizes for the CUDA implementation. It is also observed as the Edit distance threshold increases, there would be a difference of 2 between the number of accepted sequences in CUDA and C. 
 
 - **AHA moments** <br/>
 The processes that were best suited for parallelization in the original sequential implementation were the processes that utilized iterative statements to process their data. Since sequential processing processes one piece of data per cycle, these areas proved the best suited for parallelization. 
