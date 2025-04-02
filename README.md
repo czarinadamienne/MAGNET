@@ -24,9 +24,9 @@
 
    
 <br/>
-### II. Screenshot of the program output with execution time and correctness check (CUDA)<br/>
-  **E = 0**<br/>
-    **256 Blocks**<br/>
+### II. Screenshot of the program output with execution time and correctness check (CUDA)
+  **E = 0**
+    **256 Blocks**
     
   ![image](https://github.com/user-attachments/assets/3c21103a-259d-443a-94a3-8307fe1a75da)
 
