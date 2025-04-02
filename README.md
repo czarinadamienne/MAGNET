@@ -122,14 +122,21 @@ text
 Average execution time of C Program
 | Dataset size | E = 0      | E = 3 | E = 8 |
 | ------------ | ---------- | ----- | ------ |
-| 1000         |  12.36 ms | 79.94 ms | 189.54 ms |
+| 1000         |  12.36 ms | 79.94 ms | 135.00 ms |
 
 
 Average execution times of CUDA
-| Dataset size = 1000 | E = 0 | E = 3| E = 8 | Speedup compared to C |
-| ------------------- | ----- |------|--------| --------------------- |
-| Blocks = 256        |   ms |    ms |       ms  |      x  |
-| Blocks = 1024       |   ms |    ms |        ms |       x  |
+| Dataset size = 1000 | E = 0 | E = 3| E = 8 |
+| ------------------- | ----- |------|--------|
+| Blocks = 256        | 105.38 ms | 100.89 ms | 106.09 ms |
+| Blocks = 1024       | 110.56 ms | 172.39 ms | 176.40 ms |
+
+Speedup of CUDA compared to C
+| Edit distance threshold | Speedup compared to C |
+| ----------------------- | --------------------- |
+| E = 0 | 8.94x |
+| E = 3 | 2.16x |
+| E = 8 | 1.30x |
 
 
 Both kernels were timed with a vector size of 2^28 and their average execution times after 30 loops of the function were compared. The C kernel had an average execution time of 1667.850767 ms while the CUDA kernel with 1024 threads had an average execution time of 98.698222 ms. The CUDA kernel with 1024 threads was around 16.9 times faster than the C kernel. Additionally, the CUDA kernel with 256 threads had an execution time of 96.590928 ms, which is a 17.3 times faster than the C kernel. It is also observed that 256 threads is faster, for this case, than 1024 threads. This could be because 256 threads is the enough amount of threads needed as there is less memory access and fewer conflicts, since shared memory is applied in the code. There could be bank conflicts if there are too many threads per block.
