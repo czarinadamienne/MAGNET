@@ -14,13 +14,13 @@
 ## Report
 ### I. Screenshot of the program output with execution time and correctness check (C)
    **E = 0**
-   ![image](https://github.com/user-attachments/assets/d0c287cf-4a82-4dd2-b055-f04cf57b7dfe)
+   ![Untitled2](https://github.com/user-attachments/assets/4cc1a30a-6636-45b5-ae70-cf3aa7238228)
 
    **E = 3**
-   ![image](https://github.com/user-attachments/assets/7521241d-e034-4f61-9406-3381d97bd2eb)
+   ![Untitled](https://github.com/user-attachments/assets/9f1a1adf-c473-459b-b710-2ebc124df5f4)
 
    **E = 8**
-   ![image](https://github.com/user-attachments/assets/7720c52c-fe0e-4927-bed4-d5e7188a015c)
+   ![image](https://github.com/user-attachments/assets/ff44b3a5-b5d4-47be-8d56-6e2adaddbbea)
 
    
 <br/>
@@ -120,16 +120,16 @@ text
 
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
-| Dataset size | E = 0      | E = 3 | E = 10 |
+| Dataset size | E = 0      | E = 3 | E = 8 |
 | ------------ | ---------- | ----- | ------ |
-| 1000         |  12.36 μs | 79.94 μs | 149.52 μs |
+| 1000         |  12.36 ms | 79.94 ms | 189.54 ms |
 
 
 Average execution times of CUDA
-| Dataset size = 1000 | E = 0 | E = 3| E = 10 | Speedup compared to C |
+| Dataset size = 1000 | E = 0 | E = 3| E = 8 | Speedup compared to C |
 | ------------------- | ----- |------|--------| --------------------- |
-| Threads = 256         |   μs |    ms |       ms  |      x  |
-| Threads = 1024        |   μs |    ms |        ms |       x  |
+| Blocks = 256        |   ms |    ms |       ms  |      x  |
+| Blocks = 1024       |   ms |    ms |        ms |       x  |
 
 
 Both kernels were timed with a vector size of 2^28 and their average execution times after 30 loops of the function were compared. The C kernel had an average execution time of 1667.850767 ms while the CUDA kernel with 1024 threads had an average execution time of 98.698222 ms. The CUDA kernel with 1024 threads was around 16.9 times faster than the C kernel. Additionally, the CUDA kernel with 256 threads had an execution time of 96.590928 ms, which is a 17.3 times faster than the C kernel. It is also observed that 256 threads is faster, for this case, than 1024 threads. This could be because 256 threads is the enough amount of threads needed as there is less memory access and fewer conflicts, since shared memory is applied in the code. There could be bank conflicts if there are too many threads per block.
