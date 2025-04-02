@@ -80,10 +80,15 @@ The Extraction_Encapsulation() function finds long sequences of zeros in a given
   ![image](https://github.com/user-attachments/assets/1e60b933-3afb-4a2c-99dc-09a8ea446b9d)
 
   ![image](https://github.com/user-attachments/assets/43fac034-12d8-47de-845f-fee05d5bbff8)
+
+The MAGNET() function compares the reference and read sequence to assess whether they are within the predefined error threshold. It first creates hamming masks that mark differences between the sequences. If the number of differences is equal or less than the error threshold, then the function immediately accepts the sequence. Otherwise, it creates extra hamming masks by shifting the read sequence left and right, accounting for possible insertions or deletions.
+
+The function will then call Extraction_Encapsulation() to identify the longest consecutive streaks of zeros present within the insertion and deletion masks. These zero streaks represent regions where the read sequence aligns well with the reference. The function updates the MagnetMask to mark these high confidence regions while filtering out misaligned ones. The remaining mismatches will then be counted, and if it's more than the predefined edit threshold, then it will be rejected; Otherwise, it will be accepted.
     
    - Correctness checker<br/>
   ![image](https://github.com/user-attachments/assets/954d3b87-2b06-4825-81f8-f0c1fb61939f)
-   
+
+The snippet of the code showing the correctness checker compares two bit vectors, those being the finalBitVector from the intended output and another from a comparison variant. It iterates over the entire sequence being compared, and for every index, it checks if the corresponding bit in both the bit vectors match or not. If they are a mismatch at that specific index, then the error counter will be incremented by 1. This is to keep track of the number of matches between the two bit vectors.   
 
 The MAGNET pre-alignment filter would first create a hamming mask of the query and reference sequence through checking the nucleobase of the query and reference sequence in the same location. It would mark as 0 if the sequences matches, and 1 if it does not match. It would also create a deletion and insertion mask, having a total of 2E+1 hamming masks, where E is the edit distance threshold. This parameter could be set by the user. To create a deletion mask, it would shift the query sequence to the right, and to create an insertion mask, it would shift the query to the left. The number of shifts are dependent on the edit distance threshold. This is done in the MAGNET function. Next, it would find the longest consecutive zeroes in each masks and its information such as number of zeroes, and start and end index of the zeroes would be stored. The longest zeroes for each mask would be padded with 1s. This is done in Consecutive Zeroes function. It would iteratively use divide and conquer to find the longest zeroes among all the hamming masks and copy these zeroes to the final bit-vector. This is done in Extraction Encapsulation function. Lastly, it will count the number of 1s in the final bit-vector, if the number of 1s are greater than the edit distance threshold, the sequence will be rejected, but if the number of 1s are less than or equal to the edit distance threshold, the sequence will be accepted. This is done in the MAGNET function. 
 
