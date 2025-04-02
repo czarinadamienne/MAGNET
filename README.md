@@ -39,8 +39,9 @@
 
 <br/>
 **E = 0**<br/>
-    **1024 Blocks**
-    ![image](https://github.com/user-attachments/assets/ed2b1e79-c18b-4b9a-9bb1-8a1f51d698ce)
+    **1024 Blocks**<br/>
+    ![image](https://github.com/user-attachments/assets/97860dca-c34e-4b92-a0ab-31bb5ebd662a)
+
 
 **E = 3**<br/>
     **1024 Blocks**
