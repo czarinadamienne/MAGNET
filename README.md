@@ -1,5 +1,5 @@
 # Group 6 - Integrating Project
-## YOUTUBE LINK: 
+## VIDEO LINK: https://drive.google.com/file/d/19yyaQhGoQeou_CAgr178Mi-IT0y9Hr60/view?usp=sharing
 
 - This project aimts to implement the MAGNET DNA pre-alignment filter in C and utilize CUDA programming to parallelize certain functions in the source code. The CUDA implementation uses shared memory concept, memory management and atomic operations. This is tested through using 1000 genomic sequences with a length of 100 characters. The filter was tested with edit distance threshold of 0, 3, and 8.
 
