@@ -94,9 +94,14 @@ The snippet of the code showing the correctness checker compares two bit vectors
 
   
 **2. CUDA Implementation**
+
+This CUDA implementation of the MAGNET algorithm allocates memory on the GPU (cudaMalloc), transfers data between CPU and GPU (cudaMemcpy), and optimizes memory transfers using pinned memory (cudaMallocHost). It ensures proper cleanup with cudaFree and cudaFreeHost and optimizes execution using cudaDeviceScheduleYield.  The computeHammingAndErrorsKernel calculates mismatches across multiple error thresholds and stores results in shared memory. 
+
    - Compute Hamming and Errors Kernel<br/>
   ![image](https://github.com/user-attachments/assets/bf950964-8479-45cb-8c84-6af45d1ac1be)
   ![image](https://github.com/user-attachments/assets/9369f273-1d30-437c-80d0-d3851fb5ddde)
+
+The Hamming distance is computed between the reference (RefSeq) and read sequence (ReadSeq) while identifying mismatches and generating error masks. Each thread processes a specific character pair in parallel, storing mismatch results in shared memory to reduce global memory access latency. By using thread parallelism, the computation is distributed efficiently across multiple threads. 
 
    - Find Consecutive Zeroes Kernel<br/>
    ![image](https://github.com/user-attachments/assets/aeefe70a-bbfc-4467-a0e5-27628f94bfac)
@@ -105,18 +110,23 @@ The snippet of the code showing the correctness checker compares two bit vectors
    - Find Consecutive Zeroes Function<br/>
     ![image](https://github.com/user-attachments/assets/c15b952c-08e8-43c5-9b7a-1a68b557b666)
 
+It uses parallel reduction to efficiently scan the bit vector and locate zero sequences. Each thread works on a segment of the error mask, and shared memory is used to store intermediate results, improving performance by reducing redundant global memory accesses. Thread synchronization ensures that threads complete their computations before modifying shared memory. 
+
    - Extract Magnet Mask Function<br/>
    ![image](https://github.com/user-attachments/assets/b929b9eb-1666-4814-b702-70652c088179)
     ![image](https://github.com/user-attachments/assets/77e27dbd-18af-473d-a05b-8eff3225a804)
+
+CUDA does not natively support recursion efficiently due to stack limitations so for this function, it uses an iterative approach with shared memory caching to refine the alignment zones. It applies bitwise operations to filter out misaligned segments and continuously updates the mask until an optimal alignment is achieved.
 
    - Magnet CUDA Function<br/>
    ![image](https://github.com/user-attachments/assets/70bf328a-cd0a-47d3-802f-e7de76847935)
     ![image](https://github.com/user-attachments/assets/8cde2d75-a218-4d6a-9a56-5c5217533b31)
 
+ It first allocates GPU memory using cudaMalloc and copies sequences from host to device using cudaMemcpy. The function then launches the necessary CUDA kernels (computeHammingAndErrorsKernel and findConsecutiveZerosKernel), ensuring proper execution order with cudaDeviceSynchronize. Once kernel execution is complete, results are copied back to the host for analysis. It also applies asynchronous execution to overlap computation with memory transfers, maximizing GPU utilization. Finally, cudaFree is used to release allocated memory, preventing memory leaks.
+
  - Correctness checker<br/>
   ![image](https://github.com/user-attachments/assets/5c22772d-6d6e-43c1-bba1-249d0c35f0f1)
 
-text
 
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
