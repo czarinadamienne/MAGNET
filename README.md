@@ -127,6 +127,7 @@ CUDA does not natively support recursion efficiently due to stack limitations so
  - Correctness checker<br/>
   ![image](https://github.com/user-attachments/assets/5c22772d-6d6e-43c1-bba1-249d0c35f0f1)
 
+This checker tracks sequence alignment outcomes by counting accepted and rejected alignments while detecting errors. If accepted is true, acceptedCount increments; otherwise, rejectedCount increases. If result differs from check, errorCount logs mismatches.
 
 ### IV. Comparative table of execution time and Analysis
 Average execution time of C Program
