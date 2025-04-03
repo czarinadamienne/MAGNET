@@ -133,21 +133,21 @@ This checker tracks sequence alignment outcomes by counting accepted and rejecte
 Average execution time of C Program
 | Dataset size | E = 0      | E = 3 | E = 8 |
 | ------------ | ---------- | ----- | ------ |
-| 1000         |  12.36 ms | 79.94 ms | 135.00 ms |
+| 1000         | 6.33 ms | 31.05 ms | 67.53 ms |
 
 
 Average execution times of CUDA
 | Dataset size = 1000 | E = 0 | E = 3| E = 8 |
 | ------------------- | ----- |------|--------|
-| Blocks = 256        | 5.0180 us | 4.8040 us | 5.0520 us |
-| Blocks = 1024       | 5.2640 us | 8.2090 us | 8.3990 uS |
+| Blocks = 256        | 492.51 ms | 395.81 ms | 561.447 ms |
+| Blocks = 1024       | 280.63 ms | 397.46 ms | 573.018 ms |
 
 Speedup of CUDA compared to C
 | Edit distance threshold | Speedup compared to C |
 | ----------------------- | --------------------- |
-| E = 0 | 2463.13x |
-| E = 3 | 16640.30x |
-| E = 8 | 16073.34x |
+| E = 0 | 0.013x |
+| E = 3 | 0.078x |
+| E = 8 | 0.120x |
 
 
 Both implementations were timed with a dataset size of 1000 sequences and their average execution times after 10 repeats were compared. The C implementation had an average execution time of 12.36ms if E = 0, 79.94ms if E = 3, and 135.00ms if E = 8. It is observed that as the edit distance threshold increases, the execution time also increases. This is because as the edit distance threshold increase, there would be more hamming masks that would be generated and has to sequentially find the longest zeroes in each hamming mask. 
