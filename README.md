@@ -154,7 +154,7 @@ Both implementations were timed with a dataset size of 1000 sequences and their 
 
 Meanwhile, for CUDA implementation with 256 blocks, it has an average execution time of 492.51ms, if E = 0, 395.81ms if E = 3, and 561.447ms if E = 8. With 1024 blocks, it has an average execution time of 280.63ms if E = 0, 397.46ms if E = 3, and 573.018ms if E = 8. This resulted to a speedup of 0.013x for E = 0, 0.078x for E = 3, and 0.120x for E = 8. Similar to the sequential implementation, the higher the edit distance threshold, the execution time also increases. Moreover, it is observed that at 1024 blocks, the execution time is higher compared to its original implementation and 256 blocks. This could be due too many threads executing for a small dataset size. With this, it is suggested to use 256 blocks for this dataset size.
 
-One of the main observation is that the C implementation is slower than the CUDA, which could be due to CUDA using parallelism and it distributes the instructions of creating hamming mask and finding longest zeroes to multiple threads, speeding up the process. However, current CUDA implementation causes a segmentation fault at larger dataset sizes.
+One of the main observation is that the CUDA implementation is slower than the C, which could be due to a small dataset size and CUDA works more efficiently with larger datasets. However, current CUDA implementation causes a segmentation fault at larger dataset sizes.
 
 <br/>
 
